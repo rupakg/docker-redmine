@@ -25,6 +25,8 @@ NGINX_MAX_UPLOAD_SIZE=${NGINX_MAX_UPLOAD_SIZE:-20m}
 UNICORN_WORKERS=${UNICORN_WORKERS:-2}
 UNICORN_TIMEOUT=${UNICORN_TIMEOUT:-60}
 
+DB_MIGRATION=${DB_MIGRATION:-0}
+
 # is a mysql or postgresql database linked?
 # requires that the mysql or postgresql containers have exposed
 # port 3306 and 5432 respectively.
@@ -189,6 +191,10 @@ appDbMigrate () {
 }
 
 appStart () {
+	if [ "$DB_MIGRATION" == "0" ]; then
+		appDbMigrate
+		echo export DB_MIGRATION=1
+	fi	
 	# migrate database if the redmine version has changed.
 	CURRENT_VERSION=
 	REDMINE_VERSION=$(cat VERSION)
