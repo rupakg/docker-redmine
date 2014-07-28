@@ -191,9 +191,9 @@ appDbMigrate () {
 }
 
 appStart () {
-	if [ "$DB_MIGRATION" == "0" ]; then
+	if [[ "$DB_MIGRATION" == "0" ]]; then
 		appDbMigrate
-		echo export DB_MIGRATION=1
+		export DB_MIGRATION="1"
 	fi	
 	# migrate database if the redmine version has changed.
 	CURRENT_VERSION=
@@ -213,7 +213,7 @@ appStart () {
 	echo "Starting nginx..."
 	supervisorctl start nginx >/dev/null
 
-	tail -F /var/log/nginx/redmine_access.log
+	#tail -F /var/log/nginx/redmine_access.log
 }
 
 appHelp () {
